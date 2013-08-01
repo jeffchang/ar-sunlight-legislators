@@ -1,14 +1,15 @@
 require 'csv'
+require_relative '../app/models/legislator.rb'
 
 class SunlightLegislatorsImporter
-  def self.import(filename)
-    csv = CSV.new(File.open(filename), :headers => true)
-    csv.each do |row|
-      row.each do |field, value|
-        # TODO: begin
-        raise NotImplementedError, "TODO: figure out what to do with this row and do it!"
-        # TODO: end
-      end
+  def self.import
+    CSV.foreach('db/data/legislators.csv', {:headers => true, :header_converters => :symbol}) do |row|
+      row = row.to_hash
+      row.delete_if { |key, value| [:nickname, :district, :congress_office, :bioguide_id, :votesmart_id, 
+        :fec_id, :govtrack_id, :crp_id, :congresspedia_url, :youtube_url, :facebook_id, :official_rss, 
+        :senate_class].include?(key) }
+      row[:phone] = row[:phone].gsub(/\D/, "")
+      Legislator.create!(row)
     end
   end
 end
