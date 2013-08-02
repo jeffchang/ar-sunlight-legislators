@@ -2,7 +2,7 @@ require 'rake'
 require 'rspec/core/rake_task'
 require_relative 'db/config'
 require_relative 'lib/sunlight_legislators_importer'
-
+require_relative 'lib/tweet_importer'
 
 desc "create the database"
 task "db:create" do
@@ -23,9 +23,14 @@ task "db:migrate" do
   end
 end
 
-desc "populate the table"
+desc "populate the Legislators table"
 task "db:populate" do
   SunlightLegislatorsImporter.import
+end
+
+desc "populate the Tweets table"
+task "db:tweet" do
+  TweetImporter.import
 end
 
 desc 'Retrieves the current schema version number'

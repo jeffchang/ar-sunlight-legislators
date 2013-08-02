@@ -1,7 +1,19 @@
 require_relative 'models/legislator'
 require_relative 'models/representative'
 require_relative 'models/senator'
+require 'twitter'
 
+
+Twitter.configure do |config|
+  config.consumer_key = "mdxMTLkoNYgLIyqPhNCaA"
+  config.consumer_secret = "W8Kbo0ocCDGM1xk2bIiYPFYyMRxOkyZXYdxjW0188"
+  config.oauth_token = "316272091-8AR8t1DLosnRWZOY3JVuL2OIL7jyHHvislzMJejP"
+  config.oauth_token_secret = "RDzMJbwmL0UNlsinkiFpKmcjLtjw1KepPFnT9yIj7I"
+end
+
+def self.get_tweets(twitter_id)
+  Twitter.user_timeline("#{twitter_id}", {count: 10})
+end
 
 def legislators_by_state(state)
   puts "Senators:"
@@ -54,9 +66,23 @@ def delete_inactive
   inactive.each { |record| record.destroy }
 end
 
+Twitter.configure do |config|
+  config.consumer_key = "mdxMTLkoNYgLIyqPhNCaA"
+  config.consumer_secret = "W8Kbo0ocCDGM1xk2bIiYPFYyMRxOkyZXYdxjW0188"
+  config.oauth_token = "316272091-8AR8t1DLosnRWZOY3JVuL2OIL7jyHHvislzMJejP"
+  config.oauth_token_secret = "RDzMJbwmL0UNlsinkiFpKmcjLtjw1KepPFnT9yIj7I"
+end
 
-legislators_by_state('AL')
-gender_count('F')
-states_by_num
-total_num
-delete_inactive
+def self.get_tweets(twitter_id)
+  Twitter.user_timeline("#{twitter_id}", {count: 1}).each { |tweet| p tweet.id}
+end
+
+# legislators_by_state('AL')
+# gender_count('F')
+# states_by_num
+# total_num
+# delete_inactive
+
+politician = Legislator.where('twitter_id != ?', "").sample
+puts "#{politician.title}. #{politician.firstname} #{politician.lastname}'s Tweets:"
+get_tweets(politician.twitter_id)
