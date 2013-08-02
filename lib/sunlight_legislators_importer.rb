@@ -1,5 +1,7 @@
 require 'csv'
 require_relative '../app/models/legislator.rb'
+require_relative '../app/models/senator.rb'
+require_relative '../app/models/representative.rb'
 
 class SunlightLegislatorsImporter
   def self.import
@@ -9,7 +11,8 @@ class SunlightLegislatorsImporter
         :fec_id, :govtrack_id, :crp_id, :congresspedia_url, :youtube_url, :facebook_id, :official_rss, 
         :senate_class].include?(key) }
       row[:phone] = row[:phone].gsub(/\D/, "")
-      Legislator.create!(row)
+      Senator.create!(row) if row[:title] == "Sen"
+      Representative.create!(row) if row[:title] == "Rep"
     end
   end
 end

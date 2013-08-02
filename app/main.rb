@@ -1,4 +1,6 @@
 require_relative 'models/legislator'
+require_relative 'models/representative'
+require_relative 'models/senator'
 
 
 def legislators_by_state(state)
