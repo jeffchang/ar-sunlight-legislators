@@ -42,18 +42,19 @@ def states_by_num
   end
 end
 
+def total_num
+  puts "Senators: #{Legislator.where('title = ?', 'Sen').count}"
+  puts "Representatives: #{Legislator.where('title = ?', 'Rep').count}"
+end
+
+def delete_inactive
+  inactive = Legislator.where('in_office = ?', 0)
+  inactive.each { |record| record.destroy }
+end
 
 
 legislators_by_state('AL')
 gender_count('F')
 states_by_num
-
-# Print out the list of states along with how many active senators and representatives are in each, 
-# in descending order (i.e., print out states with the most congresspeople first).
-
-# CA: 2 Senators, 53 Representative(s)
-# TX: 2 Senators, 32 Representative(s)
-# NY: 2 Senators, 29 Representative(s)
-# (... etc., etc., ...)
-# WY: 2 Senators, 1 Representative(s)
-
+total_num
+delete_inactive
